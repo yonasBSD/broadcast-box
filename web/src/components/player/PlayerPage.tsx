@@ -120,19 +120,17 @@ const PlayerPage = () => {
 
       <div className={`flex flex-col w-full items-center ${!cinemaMode && "mx-auto px-2 py-2 container gap-2"}`} >
         <div className={isSingleStream ? "w-full" : "grid w-full grid-cols-2 gap-2"}>
-          {streamKeys.map((streamKey, index) => {
-            const isPrimarySingleStream = isSingleStream && index === 0;
-
+          {streamKeys.map((streamKey) => {
             return (
               <div key={`${streamKey}_player_card`} className="min-w-0 flex flex-col gap-1">
                 <StreamMOTD
                   isOnline={streamStatuses[streamKey]?.isOnline ?? false}
                   motd={streamStatuses[streamKey]?.motd ?? ""}
-                  className={isPrimarySingleStream ? "px-1" : "px-4"}
+                  className={isSingleStream ? "px-1" : "px-4"}
                 />
 
-                <div className={isPrimarySingleStream ? "relative flex flex-col gap-4 w-full" : "flex flex-col gap-1"}>
-                  <div className={isPrimarySingleStream ? `min-w-0 transition-[margin] duration-200 ${isChatOpen ? (cinemaMode ? "lg:mr-80" : "lg:mr-[21rem]") : ""}` : "min-w-0"}>
+                <div className={isSingleStream ? "relative flex flex-col gap-4 w-full" : "flex flex-col gap-1"}>
+                  <div className={isSingleStream ? `min-w-0 transition-[margin] duration-200 ${isChatOpen ? (cinemaMode ? "lg:mr-80" : "lg:mr-[21rem]") : ""}` : "min-w-0"}>
                     <Player
                       key={`${streamKey}_player`}
                       streamKey={streamKey}
@@ -141,13 +139,13 @@ const PlayerPage = () => {
                       onToggleChat={() => setIsChatOpen((prev) => !prev)}
                       onChatAdapterChange={setStreamChatAdapter}
                       onStreamStatusChange={setStreamStatus}
-                      onCloseStream={isPrimarySingleStream ? () => navigate("/") : () => removeStream(streamKey)}
+                      onCloseStream={isSingleStream ? () => navigate("/") : () => removeStream(streamKey)}
                     />
                   </div>
 
                   <ChatPanel
                     streamKey={streamKey}
-                    variant={isPrimarySingleStream ? "sidebar" : "below"}
+                    variant={isSingleStream ? "sidebar" : "below"}
                     isOpen={isChatOpen}
                     adapter={chatAdapters[streamKey]}
                     displayName={chatDisplayName}

@@ -95,6 +95,7 @@ const PlayerPage = () => {
   const playerGridGap = 8;
   const playerGridRowHeight = 16;
   const playerGridItemPixelWidth = (playerGridWidth - playerGridGap * (playerGridColumns - 1)) / playerGridColumns;
+  const isMobilePlayer = window.innerWidth < 768;
   const playerGridItemWidth = 12 / playerGridColumns;
   const isSingleStreamChatSidebar = isSingleStream && isChatOpen && playerGridItemPixelWidth >= 1024;
   const chatSidebarWidth = cinemaMode ? 320 : 336;
@@ -138,6 +139,8 @@ const PlayerPage = () => {
       <div className={`flex flex-col w-full items-center ${!cinemaMode && "mx-auto px-2 py-2 container"}`} >
         <div ref={playerGridRef} className="w-full">
           <ReactGridLayout
+            dragConfig={{ enabled: !isMobilePlayer }}
+            resizeConfig={{ enabled: !isMobilePlayer }}
             layout={streamKeys.map((streamKey, index) => ({
               i: `${streamKey}_player_card`,
               x: (index % playerGridColumns) * playerGridItemWidth,

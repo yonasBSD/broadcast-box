@@ -55,6 +55,8 @@ const Player = (props: PlayerProps) => {
 	const [layerEndpoint, setLayerEndpoint] = useState<string>('')
 	const [streamState, setStreamState] = useState<"Loading" | "Playing" | "Offline" | "Error">("Loading");
 	const [videoOverlayVisible, setVideoOverlayVisible] = useState<boolean>(false)
+	const [isVideoMuted, setIsVideoMuted] = useState<boolean>(true)
+	const [videoVolume, setVideoVolume] = useState<number>(50)
 
 	const clickDelay = 250;
 	const videoRef = useRef<HTMLVideoElement>(null);
@@ -250,7 +252,8 @@ const Player = (props: PlayerProps) => {
 
 								<span className="player-drag-cancel flex h-full items-center cursor-pointer">
 									<VolumeComponent
-										isMuted={videoElement.muted}
+										isMuted={isVideoMuted}
+										volume={videoVolume}
 										isDisabled={audioLayers.length === 0}
 										onVolumeChanged={(newValue) => {
 											if (videoRef.current) {
@@ -327,13 +330,18 @@ const Player = (props: PlayerProps) => {
 						key={`${streamVideoPlayerId}_video`}
 						ref={setVideoRef}
 					autoPlay
-					muted
+					muted={isVideoMuted}
 					playsInline
 					className="rounded-md w-full h-full relative bg-gray-950"
 					onPlaying={() => setStreamState("Playing")}
 					onLoadStart={() => setStreamState("Loading")}
+					onVolumeChange={(event) => {
+						setIsVideoMuted(event.currentTarget.muted)
+						setVideoVolume(Math.round(event.currentTarget.volume * 100))
+					}}
 						onLoadedData={(event) => {
 							console.log("VideoPlayer.onLoadedMetadata", event)
+							event.currentTarget.volume = videoVolume / 100
 							event.currentTarget.play()
 						}}
 					onError={(error) => console.log("VideoPlayer.Error", error)}

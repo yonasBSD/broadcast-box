@@ -14,15 +14,20 @@ const VolumeComponent = (props: VolumeComponentProps) => {
 	const [showSlider, setShowSlider] = useState<boolean>(false);
 
 	useEffect(() => {
-		onStateChanged(isMuted);
-	}, [isMuted, onStateChanged]);
+		setIsMuted(props.isMuted);
+	}, [props.isMuted]);
+
+	const setMuted = (newValue: boolean) => {
+		setIsMuted(newValue)
+		onStateChanged(newValue)
+	}
 
 	const onVolumeChange = (newValue: number) => {
 		if (isMuted && newValue !== 0) {
-			setIsMuted(false)
+			setMuted(false)
 		}
 		if (!isMuted && newValue === 0) {
-			setIsMuted(true)
+			setMuted(true)
 		}
 
 		onVolumeChanged(newValue);
@@ -38,10 +43,10 @@ const VolumeComponent = (props: VolumeComponentProps) => {
 		className="flex justify-start max-w-42 gap-2 items-center"
 	>
 		{isMuted && (
-			<SpeakerXMarkIcon className="w-5" onClick={() => setIsMuted((prev) => !prev)} />
+			<SpeakerXMarkIcon className="w-5" onClick={() => setMuted(false)} />
 		)}
 		{!isMuted && (
-			<SpeakerWaveIcon className="w-5" onClick={() => setIsMuted((prev) => !prev)} />
+			<SpeakerWaveIcon className="w-5" onClick={() => setMuted(true)} />
 		)}
 
 		<VolumeSlider

@@ -139,7 +139,11 @@ const PlayerPage = () => {
       <div className={`flex flex-col w-full items-center ${!cinemaMode && "mx-auto px-2 py-2 container"}`} >
         <div ref={playerGridRef} className="w-full">
           <ReactGridLayout
-            dragConfig={{ enabled: !isMobilePlayer }}
+            dragConfig={{
+              enabled: !isMobilePlayer,
+              handle: ".player-drag-handle",
+              cancel: ".player-drag-cancel,button,input,select,textarea,a,[role='button']",
+            }}
             resizeConfig={{ enabled: !isMobilePlayer }}
             layout={streamKeys.map((streamKey, index) => ({
               i: `${streamKey}_player_card`,

@@ -242,10 +242,13 @@ const Player = (props: PlayerProps) => {
 							<div
 								onClick={stopOverlayClickPropagation}
 								onDoubleClick={stopOverlayClickPropagation}
-								className="bg-blue-950 w-full flex flex-row gap-2 h-1/14 p-1 max-h-8 min-h-8 rounded-md">
+								className="player-drag-handle bg-blue-950 w-full flex flex-row gap-2 h-1/14 p-1 max-h-8 min-h-8 rounded-md cursor-move">
 
-								<PlayPauseComponent videoRef={videoRef} />
+								<span className="player-drag-cancel flex h-full items-center cursor-pointer">
+									<PlayPauseComponent videoRef={videoRef} />
+								</span>
 
+								<span className="player-drag-cancel flex h-full items-center cursor-pointer">
 									<VolumeComponent
 										isMuted={videoElement.muted}
 										isDisabled={audioLayers.length === 0}
@@ -260,16 +263,25 @@ const Player = (props: PlayerProps) => {
 											}
 										}}
 									/>
+								</span>
 
 								<div className="w-full pointer-events-none"></div>
 
-								<CurrentViewersComponent currentViewersCount={currentStreamStatus?.viewers ?? 0} />
+								<span className="player-drag-cancel flex h-full items-center cursor-default">
+									<CurrentViewersComponent currentViewersCount={currentStreamStatus?.viewers ?? 0} />
+								</span>
+								<span className="player-drag-cancel flex h-full items-center cursor-pointer">
 									<VideoLayerSelectorComponent layers={videoLayers} layerEndpoint={layerEndpoint} hasPacketLoss={false} currentLayer={currentLayersStatus?.videoLayerCurrent ?? ""} />
-									{audioLayers.length > 1 && (
+								</span>
+
+								{audioLayers.length > 1 && (
+									<span className="player-drag-cancel flex h-full items-center cursor-pointer">
 										<AudioLayerSelectorComponent layers={audioLayers} layerEndpoint={layerEndpoint} hasPacketLoss={false} currentLayer={currentLayersStatus?.videoLayerCurrent ?? ""} />
-									)}
-									<Square2StackIcon onClick={() => videoElement?.requestPictureInPicture()} />
-								<ArrowsPointingOutIcon onClick={handleEnterFullscreen} />
+									</span>
+								)}
+
+								<Square2StackIcon className="player-drag-cancel cursor-pointer" onClick={() => videoElement?.requestPictureInPicture()} />
+								<ArrowsPointingOutIcon className="player-drag-cancel cursor-pointer" onClick={handleEnterFullscreen} />
 							</div>
 						</div>)
 					}
